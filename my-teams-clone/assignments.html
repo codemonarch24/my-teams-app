@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .assignment-list {
+            margin-top: 20px;
+        }
+        .assignment-item {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+   <!-- Add this to the body element of each page -->
+<div id="announcement-box" class="announcement-box" style="display: none;">
+    <button id="prev-btn">&lt;</button>
+    <span id="announcement-text"></span>
+    <button id="next-btn">&gt;</button>
+    <button id="close-btn">X</button>
+</div>
+
+<script>
+    let announcements = [];
+    let currentIndex = 0;
+
+    function showAnnouncement() {
+        const announcementBox = document.getElementById('announcement-box');
+        const announcementText = document.getElementById('announcement-text');
+        const prevButton = document.getElementById('prev-btn');
+        const nextButton = document.getElementById('next-btn');
+        const closeButton = document.getElementById('close-btn');
+
+        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+        if (announcements.length > 0) {
+            announcementBox.style.display = 'flex';
+            displayAnnouncement(currentIndex);
+
+            prevButton.addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + announcements.length) % announcements.length;
+                displayAnnouncement(currentIndex);
+            });
+
+            nextButton.addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % announcements.length;
+                displayAnnouncement(currentIndex);
+            });
+
+            closeButton.addEventListener('click', function() {
+                announcementBox.style.display = 'none';
+            });
+        }
+    }
+
+    function displayAnnouncement(index) {
+        const announcementText = document.getElementById('announcement-text');
+        if (announcements.length > 0) {
+            announcementText.textContent = announcements[index].text;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', showAnnouncement);
+</script>
+
+
+    <div class="sidebar">
+        <h2>App Name</h2>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="meetings.html">Meetings</a></li>
+            <li><a href="assignments.html">Assignments</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+            <li><a href="messages.html">Messages</a></li>
+            <li><a href="tasks.html">Tasks</a></li>
+            <li><a href="calender.html">Calender</a></li>
+            <li><a href="login.html" onclick="logout()">Logout</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Assignments</h1>
+        <a href="assignment-entry.html" class="button">Create New Assignment</a>
+        <div id="assignment-list" class="assignment-list">
+            <!-- Assignments will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function addAssignmentToList(assignment) {
+                const assignmentList = document.getElementById('assignment-list');
+                const assignmentItem = document.createElement('div');
+                assignmentItem.classList.add('assignment-item');
+                assignmentItem.innerHTML = `
+                    <strong>${assignment.name}</strong><br>
+                    Details: ${assignment.details}<br>
+                    People Assigned To: ${assignment.people}
+                `;
+                assignmentList.appendChild(assignmentItem);
+            }
+
+            function loadAssignments() {
+                const assignments = JSON.parse(localStorage.getItem('assignments')) || [];
+                assignments.forEach(assignment => addAssignmentToList(assignment));
+            }
+
+            loadAssignments();
+        });
+    </script>
+</body>
+</html>

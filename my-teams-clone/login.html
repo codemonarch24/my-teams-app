@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <center><img src="images/logo.png" height="200px" width="200px"/></center>
+        <form id="login-form">
+            <a href="#" onclick="confirmLogout()">Logout</a>
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button type="button" onclick="sendOtp()">Send OTP</button>
+            <input type="text" id="otp" placeholder="Enter OTP" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script src="js/scripts.js"></script>
+</body>
+</html>

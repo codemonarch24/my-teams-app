@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Entry</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .task-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .task-form input, .task-form textarea, .task-form button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .task-form button {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .task-form button:hover {
+            background-color: #5a2e91;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Entry</h1>
+    <form id="task-form" class="task-form">
+        <input type="text" id="task-name" placeholder="Task Name" required />
+        <textarea id="task-details" rows="4" placeholder="Task Details"></textarea>
+        <input type="date" id="task-assigned-on" required />
+        <input type="date" id="task-ended-on" placeholder="Task End Date (Optional)" />
+        <button type="submit">Save Task</button>
+        <div id="task-error-message" class="error-message"></div>
+    </form>
+
+    <script>
+        document.getElementById('task-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('task-name').value.trim();
+            const details = document.getElementById('task-details').value.trim();
+            const assignedOn = document.getElementById('task-assigned-on').value;
+            const endedOn = document.getElementById('task-ended-on').value || 'No End Date';
+
+            if (name === '' || assignedOn === '') {
+                document.getElementById('task-error-message').textContent = 'Please fill in the required fields.';
+                return;
+            }
+
+            const task = { name, details, assignedOn, endedOn };
+
+            // Save task to localStorage
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            tasks.push(task);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+
+            // Redirect to tasks page
+            window.location.href = 'tasks.html';
+        });
+    </script>
+</body>
+</html>

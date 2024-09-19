@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Meeting</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .meeting-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .meeting-form input, .meeting-form textarea, .meeting-form select, .meeting-form button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .meeting-form button {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .meeting-form button:hover {
+            background-color: #5a2e91;
+        }
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Meeting</h1>
+    <form id="meeting-form" class="meeting-form">
+        <input type="text" id="meeting-name" placeholder="Meeting Name" required />
+        <textarea id="meeting-details" rows="4" placeholder="Meeting Details"></textarea>
+        <input type="datetime-local" id="meeting-start-time" required />
+        <select id="meeting-type" required>
+            <option value="">Select Meeting Type</option>
+            <option value="MIS">MIS</option>
+            <option value="CONTROL ROOM">CONTROL ROOM</option>
+            <option value="SHED KJM">SHED KJM</option>
+        </select>
+        <input type="date" id="meeting-date" required />
+        <button type="submit">Save Meeting</button>
+        <div id="meeting-error-message" class="error-message"></div>
+    </form>
+
+    <script>
+        document.getElementById('meeting-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('meeting-name').value.trim();
+            const details = document.getElementById('meeting-details').value.trim();
+            const startTime = document.getElementById('meeting-start-time').value;
+            const type = document.getElementById('meeting-type').value;
+            const date = document.getElementById('meeting-date').value;
+
+            if (name === '' || startTime === '' || type === '' || date === '') {
+                document.getElementById('meeting-error-message').textContent = 'Please fill in all required fields.';
+                return;
+            }
+
+            const meeting = { name, details, startTime, type, date };
+
+            // Save meeting to localStorage
+            let meetings = JSON.parse(localStorage.getItem('meetings')) || [];
+            meetings.push(meeting);
+            localStorage.setItem('meetings', JSON.stringify(meetings));
+
+            // Redirect to meetings page
+            window.location.href = 'meetings.html';
+        });
+    </script>
+</body>
+</html>

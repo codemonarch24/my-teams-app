@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        
+        /* Announcements Page Styles */
+        .announcement-list {
+            margin-top: 20px;
+        }
+
+        .announcement-item {
+            background-color: #e9f7f9;
+            border: 1px solid #b3e0e5;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .announcement-item button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+        }
+
+        .announcement-item button:hover {
+            background-color: #cc0000;
+        }
+
+        .announcement-box {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #e9f7f9;
+            border: 1px solid #b3e0e5;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .announcement-box button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .announcement-box button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>App Name</h2>
+        </div>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="meetings.html">Meetings</a></li>
+            <li><a href="assignments.html">Assignments</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+            <li><a href="messages.html">Messages</a></li>
+            <li><a href="tasks.html">Tasks</a></li>
+            <li><a href="calender.html">Calender</a></li>
+            <li><a href="login.html" onclick="logout()">Logout</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Announcements</h1>
+        <button onclick="window.location.href='create-announcement.html'">Create New Announcement</button>
+        <div id="announcements-list" class="announcement-list">
+            <!-- Announcements will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        function updateAnnouncementsPage() {
+            const announcementsList = document.getElementById('announcements-list');
+            announcementsList.innerHTML = ''; // Clear existing announcements
+            const announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+            announcements.forEach(announcement => {
+                const announcementItem = document.createElement('div');
+                announcementItem.classList.add('announcement-item');
+                announcementItem.innerHTML = `
+                    ${announcement.text}
+                    <button onclick="deleteAnnouncement('${announcement.id}')">X</button>
+                `;
+                announcementsList.appendChild(announcementItem);
+            });
+        }
+
+        function deleteAnnouncement(id) {
+            let announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+            announcements = announcements.filter(announcement => announcement.id !== id);
+            localStorage.setItem('announcements', JSON.stringify(announcements));
+            updateAnnouncementsPage();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAnnouncementsPage();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetings</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .meeting-list {
+            margin-top: 20px;
+        }
+        .meeting-item {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add this to the body element of each page -->
+<div id="announcement-box" class="announcement-box" style="display: none;">
+    <button id="prev-btn">&lt;</button>
+    <span id="announcement-text"></span>
+    <button id="next-btn">&gt;</button>
+    <button id="close-btn">X</button>
+</div>
+
+<script>
+    let announcements = [];
+    let currentIndex = 0;
+
+    function showAnnouncement() {
+        const announcementBox = document.getElementById('announcement-box');
+        const announcementText = document.getElementById('announcement-text');
+        const prevButton = document.getElementById('prev-btn');
+        const nextButton = document.getElementById('next-btn');
+        const closeButton = document.getElementById('close-btn');
+
+        announcements = JSON.parse(localStorage.getItem('announcements')) || [];
+        if (announcements.length > 0) {
+            announcementBox.style.display = 'flex';
+            displayAnnouncement(currentIndex);
+
+            prevButton.addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + announcements.length) % announcements.length;
+                displayAnnouncement(currentIndex);
+            });
+
+            nextButton.addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % announcements.length;
+                displayAnnouncement(currentIndex);
+            });
+
+            closeButton.addEventListener('click', function() {
+                announcementBox.style.display = 'none';
+            });
+        }
+    }
+
+    function displayAnnouncement(index) {
+        const announcementText = document.getElementById('announcement-text');
+        if (announcements.length > 0) {
+            announcementText.textContent = announcements[index].text;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', showAnnouncement);
+</script>
+
+
+    <div class="sidebar">
+        <h2>App Name</h2>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="meetings.html">Meetings</a></li>
+            <li><a href="assignments.html">Assignments</a></li>
+            <li><a href="announcements.html">Announcements</a></li>
+            <li><a href="messages.html">Messages</a></li>
+            <li><a href="tasks.html">Tasks</a></li>
+            <li><a href="calender.html">Calender</a></li>
+            <li><a href="login.html" onclick="logout()">Logout</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>Meetings</h1>
+        <a href="meeting-entry.html" class="button">Create New Meeting</a>
+        <div id="meeting-list" class="meeting-list">
+            <!-- Meetings will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function addMeetingToList(meeting) {
+                const meetingList = document.getElementById('meeting-list');
+                const meetingItem = document.createElement('div');
+                meetingItem.classList.add('meeting-item');
+                meetingItem.innerHTML = `
+                    <strong>${meeting.name}</strong><br>
+                    Details: ${meeting.details}<br>
+                    Start Time: ${meeting.startTime}<br>
+                    Type: ${meeting.type}<br>
+                    Date: ${meeting.date}
+                `;
+                meetingList.appendChild(meetingItem);
+            }
+
+            function loadMeetings() {
+                const meetings = JSON.parse(localStorage.getItem('meetings')) || [];
+                meetings.forEach(meeting => addMeetingToList(meeting));
+            }
+
+            loadMeetings();
+        });
+    </script>
+</body>
+</html>
